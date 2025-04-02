@@ -958,3 +958,11 @@ create_fast_downward_library(
         algorithms/sccs
     DEPENDENCY_ONLY
 )
+
+create_fast_downward_library(
+    NAME mirco
+    HELP "Diverse Tiebreaking open list for bachelor's thesis"
+    SOURCES
+        open_lists/div_tiebreaking_open_list
+    CORE_LIBRARY
+)
