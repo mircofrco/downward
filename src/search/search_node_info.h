@@ -12,6 +12,7 @@ struct SearchNodeInfo {
 
     unsigned int status : 2;
     int g : 30;
+    int d;
     StateID parent_state_id;
     OperatorID creating_operator;
     int real_g;
