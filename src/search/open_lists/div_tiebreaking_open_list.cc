@@ -12,6 +12,9 @@
 #include <utility>
 #include <vector>
 #include <optional>
+#include <cstdlib>
+#include <ctime>
+#include <iterator>
 
 using namespace std;
 
@@ -71,7 +74,7 @@ void DivTieBreakingOpenList<Entry>::do_insertion(
     vector<int> key;
     key.reserve(evaluators.size());
     for (const shared_ptr<Evaluator> &evaluator : evaluators)
-        key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get()));
+        key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get())); // gibt zuerst g-val zurück und dann nimmt nächster evaltuator (heuristic) und gibt h wert zurück
 
     buckets[key].push_back(entry);
     ++size;
@@ -87,6 +90,7 @@ Entry DivTieBreakingOpenList<Entry>::remove_min() {
     --size;
 
     std::optional<Entry> result;
+    auto it_elem = it->second.end();
 
     switch(tiebreaking_criteria) {
     case TieBreakingCriteria::FIFO:
@@ -98,11 +102,17 @@ Entry DivTieBreakingOpenList<Entry>::remove_min() {
         it->second.pop_back();
         break;
     case TieBreakingCriteria::RANDOM:
-        //TODO: Random pop
-        result = it->second.back();
-        it->second.pop_back();
+        srand(time(nullptr));
+        int pos;
+        int i;
+        i = it->second.size();
+        pos = (rand() % i);
+        it_elem = it->second.begin() + pos;
+        result = *it_elem;
+        it->second.erase(it_elem);
         break;
     default:
+        cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
         Entry result = it->second.front();
         it->second.pop_front();
     }
@@ -190,7 +200,7 @@ DivTieBreakingOpenListFactory::create_edge_open_list() {
 class DivTieBreakingOpenListFeature
     : public plugins::TypedFeature<OpenListFactory, DivTieBreakingOpenListFactory> {
 public:
-    DivTieBreakingOpenListFeature() : TypedFeature("tiebreaking") {
+    DivTieBreakingOpenListFeature() : TypedFeature("div_tiebreaking") {
         document_title("Tie-breaking open list");
         document_synopsis("");
 
@@ -201,7 +211,7 @@ public:
             "true");
         add_option<TieBreakingCriteria>(
             "tiebreaking_criteria",
-            "Choose between 'fifo' (First-In-First-Out) or 'lifo' (Last-In-First-Out)",
+            "Choose between 'fifo' (First-In-First-Out), 'lifo' (Last-In-First-Out) or at random",
             "fifo");
         add_open_list_options_to_feature(*this);
     }
@@ -223,8 +233,8 @@ public:
 static plugins::FeaturePlugin<DivTieBreakingOpenListFeature> _plugin;
 
 static plugins::TypedEnumPlugin<TieBreakingCriteria> _enum_plugin({
-        {"fifo", "according to their (internal) variable index"},
-        {"lifo", "according to a random permutation"},
-        {"random", "according to their h^add value, lowest first"}
+        {"fifo", "tiebreaking with First-In-First-Out"},
+        {"lifo", "tiebreaking with Last-In-First-Out"},
+        {"random", "tiebreaking at random"}
 });
 }
