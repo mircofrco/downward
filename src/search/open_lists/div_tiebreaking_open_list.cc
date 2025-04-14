@@ -38,9 +38,12 @@ class DivTieBreakingOpenList : public OpenList<Entry> {
 
     int dimension() const;
 
+    void div_do_insertion(EvaluationContext &eval_context,
+                          const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
+
 protected:
-    virtual void do_insertion(EvaluationContext &eval_context,
-                              const Entry &entry) override;
+    void do_insertion(EvaluationContext &eval_context,
+                          const Entry &entry) override;
 
 public:
     DivTieBreakingOpenList(
@@ -55,6 +58,7 @@ public:
         EvaluationContext &eval_context) const override;
     virtual bool is_reliable_dead_end(
         EvaluationContext &eval_context) const override;
+    void insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
 };
 
 
@@ -69,15 +73,35 @@ DivTieBreakingOpenList<Entry>::DivTieBreakingOpenList( // Constructor when crite
 }
 
 template<class Entry>
-void DivTieBreakingOpenList<Entry>::do_insertion(
-    EvaluationContext &eval_context, const Entry &entry) {
+void DivTieBreakingOpenList<Entry>::div_do_insertion(
+    EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
+    //TODO: actual stuff
+    //State curr_state = eval_context.get_state();
+    //SearchNode curr_node = get_node(curr_state);
+
     vector<int> key;
     key.reserve(evaluators.size());
     for (const shared_ptr<Evaluator> &evaluator : evaluators)
-        key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get())); // gibt zuerst g-val zurück und dann nimmt nächster evaltuator (heuristic) und gibt h wert zurück
+        key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get())); // gibt zuerst g-val zurück und dann nimmt nächsten evaluator (heuristic) und gibt h-val zurück
 
     buckets[key].push_back(entry);
     ++size;
+}
+
+template<typename Entry>
+void DivTieBreakingOpenList<Entry>::do_insertion(
+        EvaluationContext &eval_context,
+        const Entry &entry) {
+    // TODO: error msg
+}
+
+template<class Entry>
+void DivTieBreakingOpenList<Entry>::insert( // overrides already implemented method from open_list.h
+        EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
+    if (false && !eval_context.is_preferred())
+        return;
+    if (!is_dead_end(eval_context))
+        div_do_insertion(eval_context, entry, parent_eval_context, d_val);
 }
 
 template<class Entry>

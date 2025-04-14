@@ -46,6 +46,7 @@ public:
       do_insertion.
     */
     void insert(EvaluationContext &eval_context, const Entry &entry);
+    void insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
 
     /*
       Remove and return the entry that should be expanded next.
@@ -143,12 +144,18 @@ void OpenList<Entry>::boost_preferred() {
 }
 
 template<class Entry>
-void OpenList<Entry>::insert(
+void OpenList<Entry>::insert( // original insert
     EvaluationContext &eval_context, const Entry &entry) {
     if (only_preferred && !eval_context.is_preferred())
         return;
     if (!is_dead_end(eval_context))
         do_insertion(eval_context, entry);
+}
+
+template<class Entry>
+void OpenList<Entry>::insert( // dummy method for all open_list types except div_tiebreaking
+        EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
+    // TODO: error msg
 }
 
 template<class Entry>
