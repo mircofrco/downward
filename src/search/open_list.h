@@ -156,6 +156,10 @@ template<class Entry>
 void OpenList<Entry>::insert( // dummy method for all open_list types except div_tiebreaking
         EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
     // TODO: error msg
+    (void)eval_context;
+    (void)entry;
+    (void)parent_eval_context;
+    (void)d_val;
 }
 
 template<class Entry>

@@ -93,6 +93,8 @@ void DivTieBreakingOpenList<Entry>::do_insertion(
         EvaluationContext &eval_context,
         const Entry &entry) {
     // TODO: error msg
+    (void)eval_context;
+    (void)entry;
 }
 
 template<class Entry>
