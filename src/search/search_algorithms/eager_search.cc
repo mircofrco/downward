@@ -3,6 +3,7 @@
 #include "../evaluation_context.h"
 #include "../evaluator.h"
 #include "../open_list_factory.h"
+#include "../open_lists/div_tiebreaking_open_list.h"
 #include "../pruning_method.h"
 
 #include "../algorithms/ordered_set.h"
@@ -208,6 +209,9 @@ SearchStatus EagerSearch::step() {
 
         SearchNode succ_node = search_space.get_node(succ_state);
 
+        EvaluationContext curr_eval_context(s, node->get_g(), is_preferred, &statistics);
+        int d_value = node->get_d(); // depth_value for depth-diversification strategy
+
         for (Evaluator *evaluator : path_dependent_evaluators) {
             evaluator->notify_state_transition(s, op_id, succ_state);
         }
@@ -228,7 +232,7 @@ SearchStatus EagerSearch::step() {
             int succ_g = node->get_g() + get_adjusted_cost(op);
 
             EvaluationContext succ_eval_context(
-                succ_state, succ_g, is_preferred, &statistics);
+                succ_state, succ_g, is_preferred, &statistics); // eval from successor node
             statistics.inc_evaluated_states();
 
             if (open_list->is_dead_end(succ_eval_context)) {
@@ -238,7 +242,13 @@ SearchStatus EagerSearch::step() {
             }
             succ_node.open_new_node(*node, op, get_adjusted_cost(op));
 
-            open_list->insert(succ_eval_context, succ_state.get_id());
+            if (true) { // TODO: true ersetzten mit use_depth flag
+                open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
+                // TODO: get d-val aus succ_eval_context.get_depth() und schreib in searchNodeInfo
+            } else {
+                open_list->insert(succ_eval_context, succ_state.get_id());
+            }
+
             if (search_progress.check_progress(succ_eval_context)) {
                 statistics.print_checkpoint_line(succ_node.get_g());
                 reward_progress();
@@ -251,6 +261,7 @@ SearchStatus EagerSearch::step() {
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), is_preferred, &statistics);
                 open_list->insert(succ_eval_context, succ_state.get_id());
+                // TODO: insert logic
             } else if (succ_node.is_closed() && reopen_closed_nodes) {
                 /*
                   TODO: It would be nice if we had a way to test
@@ -264,6 +275,7 @@ SearchStatus EagerSearch::step() {
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), is_preferred, &statistics);
                 open_list->insert(succ_eval_context, succ_state.get_id());
+                // TODO: insert logic
             } else {
                 /*
                   If we do not reopen closed nodes, we just update the parent
@@ -279,6 +291,7 @@ SearchStatus EagerSearch::step() {
               We found an equally or more expensive path to an open or closed
               state.
             */
+            // TODO: optimierungsproblem
         }
     }
     return IN_PROGRESS;
