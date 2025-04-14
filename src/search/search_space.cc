@@ -45,6 +45,11 @@ int SearchNode::get_d() const {
     return info.d;
 }
 
+void SearchNode::set_d(int d_val) const {
+    assert(d_val >= 0);
+    info.d = d_val;
+}
+
 int SearchNode::get_real_g() const {
     return info.real_g;
 }
