@@ -35,6 +35,7 @@ public:
     int get_g() const;
     int get_d() const;
     int get_real_g() const;
+    void set_d(int d_val) const;
 
     void open_initial();
     void open_new_node(const SearchNode &parent_node,
