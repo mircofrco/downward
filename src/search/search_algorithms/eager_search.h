@@ -24,6 +24,7 @@ class EagerSearch : public SearchAlgorithm {
 
     std::vector<Evaluator *> path_dependent_evaluators;
     std::vector<std::shared_ptr<Evaluator>> preferred_operator_evaluators;
+    bool use_depth;
     std::shared_ptr<Evaluator> lazy_evaluator;
 
     std::shared_ptr<PruningMethod> pruning_method;
@@ -41,6 +42,7 @@ public:
         const std::shared_ptr<OpenListFactory> &open,
         bool reopen_closed, const std::shared_ptr<Evaluator> &f_eval,
         const std::vector<std::shared_ptr<Evaluator>> &preferred,
+        const bool use_depth,
         const std::shared_ptr<PruningMethod> &pruning,
         const std::shared_ptr<Evaluator> &lazy_evaluator,
         OperatorCost cost_type, int bound, double max_time,

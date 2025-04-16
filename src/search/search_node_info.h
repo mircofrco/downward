@@ -18,7 +18,7 @@ struct SearchNodeInfo {
     int real_g;
 
     SearchNodeInfo() // initialiserlist (kurzform von konstruktor) mit -1 als default
-        : status(NEW), g(-1), d(-1), parent_state_id(StateID::no_state),
+        : status(NEW), g(-1), d(0), parent_state_id(StateID::no_state),
           creating_operator(-1), real_g(-1) {
     }
 };
