@@ -29,6 +29,10 @@ public:
             "[]");
         eager_search::add_eager_search_options_to_feature(
             *this, "eager");
+        add_option<bool>(
+                "use_depth",
+                "use depth-diversification for tiebreaking",
+                "false");
     }
 
     virtual shared_ptr<eager_search::EagerSearch> create_component(
@@ -39,6 +43,7 @@ public:
             opts.get<bool>("reopen_closed"),
             opts.get<shared_ptr<Evaluator>>("f_eval", nullptr),
             opts.get_list<shared_ptr<Evaluator>>("preferred"),
+            opts.get<bool>("use_depth"),
             eager_search::get_eager_search_arguments_from_options(opts)
             );
     }

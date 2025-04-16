@@ -60,6 +60,7 @@ public:
             opts.get<bool>("reopen_closed"),
             opts.get<shared_ptr<Evaluator>>("f_eval", nullptr),
             opts.get_list<shared_ptr<Evaluator>>("preferred"),
+            false,
             eager_search::get_eager_search_arguments_from_options(opts)
             );
     }

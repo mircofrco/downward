@@ -77,6 +77,7 @@ public:
             false,
             nullptr,
             opts.get_list<shared_ptr<Evaluator>>("preferred"),
+            false,
             eager_search::get_eager_search_arguments_from_options(opts)
             );
     }
