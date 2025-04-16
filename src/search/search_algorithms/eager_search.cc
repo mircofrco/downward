@@ -24,6 +24,7 @@ EagerSearch::EagerSearch(
     const shared_ptr<OpenListFactory> &open, bool reopen_closed,
     const shared_ptr<Evaluator> &f_eval,
     const vector<shared_ptr<Evaluator>> &preferred,
+    const bool use_depth,
     const shared_ptr<PruningMethod> &pruning,
     const shared_ptr<Evaluator> &lazy_evaluator, OperatorCost cost_type,
     int bound, double max_time, const string &description,
@@ -34,6 +35,7 @@ EagerSearch::EagerSearch(
       open_list(open->create_state_open_list()),
       f_evaluator(f_eval),     // default nullptr
       preferred_operator_evaluators(preferred),
+      use_depth(use_depth),
       lazy_evaluator(lazy_evaluator),     // default nullptr
       pruning_method(pruning) {
     if (lazy_evaluator && !lazy_evaluator->does_cache_estimates()) {
@@ -101,7 +103,13 @@ void EagerSearch::initialize() {
         SearchNode node = search_space.get_node(initial_state);
         node.open_initial();
 
-        open_list->insert(eval_context, initial_state.get_id());
+        if (use_depth) {
+            EvaluationContext dummy_context(initial_state, 0, false, &statistics);
+            open_list->insert(eval_context, initial_state.get_id(), dummy_context, -1);
+        } else {
+            open_list->insert(eval_context, initial_state.get_id());
+        }
+
     }
 
     print_initial_evaluator_values(eval_context);
@@ -211,6 +219,7 @@ SearchStatus EagerSearch::step() {
 
         EvaluationContext curr_eval_context(s, node->get_g(), is_preferred, &statistics);
         int d_value = node->get_d(); // depth_value for depth-diversification strategy
+        curr_eval_context.set_d_value(d_value);
 
         for (Evaluator *evaluator : path_dependent_evaluators) {
             evaluator->notify_state_transition(s, op_id, succ_state);
@@ -241,13 +250,10 @@ SearchStatus EagerSearch::step() {
                 continue;
             }
             succ_node.open_new_node(*node, op, get_adjusted_cost(op));
-            bool use_depth = true;
-            if (use_depth) { // TODO: true ersetzten mit use_depth flag
+            if (use_depth) {
                 open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
-                State new_succ_state = succ_eval_context.get_state();
-                SearchNode new_succ_node = search_space.get_node(new_succ_state);
                 int new_d = succ_eval_context.get_d_value();
-                new_succ_node.set_d(new_d);
+                succ_node.set_d(new_d);
             } else {
                 open_list->insert(succ_eval_context, succ_state.get_id());
             }
@@ -263,8 +269,13 @@ SearchStatus EagerSearch::step() {
                     *node, op, get_adjusted_cost(op));
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), is_preferred, &statistics);
-                open_list->insert(succ_eval_context, succ_state.get_id());
-                // TODO: insert logic
+                if (use_depth) {
+                    open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
+                    int new_d = succ_eval_context.get_d_value();
+                    succ_node.set_d(new_d);
+                } else {
+                    open_list->insert(succ_eval_context, succ_state.get_id());
+                }
             } else if (succ_node.is_closed() && reopen_closed_nodes) {
                 /*
                   TODO: It would be nice if we had a way to test
@@ -277,8 +288,13 @@ SearchStatus EagerSearch::step() {
                 succ_node.reopen_closed_node(*node, op, get_adjusted_cost(op));
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), is_preferred, &statistics);
-                open_list->insert(succ_eval_context, succ_state.get_id());
-                // TODO: insert logic
+                if (use_depth) {
+                    open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
+                    int new_d = succ_eval_context.get_d_value();
+                    succ_node.set_d(new_d);
+                } else {
+                    open_list->insert(succ_eval_context, succ_state.get_id());
+                }
             } else {
                 /*
                   If we do not reopen closed nodes, we just update the parent
