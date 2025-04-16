@@ -241,10 +241,13 @@ SearchStatus EagerSearch::step() {
                 continue;
             }
             succ_node.open_new_node(*node, op, get_adjusted_cost(op));
-
-            if (true) { // TODO: true ersetzten mit use_depth flag
+            bool use_depth = true;
+            if (use_depth) { // TODO: true ersetzten mit use_depth flag
                 open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
-                // TODO: get d-val aus succ_eval_context.get_depth() und schreib in searchNodeInfo
+                State new_succ_state = succ_eval_context.get_state();
+                SearchNode new_succ_node = search_space.get_node(new_succ_state);
+                int new_d = succ_eval_context.get_d_value();
+                new_succ_node.set_d(new_d);
             } else {
                 open_list->insert(succ_eval_context, succ_state.get_id());
             }
