@@ -47,6 +47,7 @@ class EvaluationContext {
     bool preferred;
     SearchStatistics *statistics;
     bool calculate_preferred;
+    int d_value = 0;
 
     static const int INVALID = -1;
 
@@ -92,6 +93,8 @@ public:
     const EvaluatorCache &get_cache() const;
     const State &get_state() const;
     int get_g_value() const;
+    int get_d_value() const;
+    void set_d_value(int new_d);
     bool is_preferred() const;
 
     /*

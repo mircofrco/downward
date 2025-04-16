@@ -68,6 +68,16 @@ int EvaluationContext::get_g_value() const {
     return g_value;
 }
 
+int EvaluationContext::get_d_value() const {
+    assert(d_value != INVALID);
+    return d_value;
+}
+
+void EvaluationContext::set_d_value(int new_d) {
+    assert(new_d >= 0);
+    d_value = new_d;
+}
+
 bool EvaluationContext::is_preferred() const {
     assert(g_value != INVALID);
     return preferred;
