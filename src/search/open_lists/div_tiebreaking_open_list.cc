@@ -76,6 +76,9 @@ template<class Entry>
 void DivTieBreakingOpenList<Entry>::div_do_insertion(
     EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
     //TODO: actual stuff
+    if (d_val == -1) {
+        // TODO: initialze, d = -1
+    }
     //State curr_state = eval_context.get_state();
     //SearchNode curr_node = get_node(curr_state);
 
@@ -92,9 +95,10 @@ template<typename Entry>
 void DivTieBreakingOpenList<Entry>::do_insertion(
         EvaluationContext &eval_context,
         const Entry &entry) {
-    // TODO: error msg
     (void)eval_context;
     (void)entry;
+    cerr << "This is just a dummy method which should not be called!" <<endl;
+    exit(-1);
 }
 
 template<class Entry>
