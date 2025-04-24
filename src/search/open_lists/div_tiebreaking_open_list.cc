@@ -76,16 +76,30 @@ template<class Entry>
 void DivTieBreakingOpenList<Entry>::div_do_insertion(
     EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
     //TODO: actual stuff
+    vector<int> key;
     if (d_val == -1) {
         // TODO: initialze, d = -1
-    }
-    //State curr_state = eval_context.get_state();
-    //SearchNode curr_node = get_node(curr_state);
+        eval_context.set_d_value(0);
+    } else {
+        int f_val;
+        int parent_f_val;
+        key.reserve(evaluators.size());
+        std::string sum_check("sum");
+        for (const shared_ptr<Evaluator> &evaluator : evaluators)
+            if (sum_check.compare(evaluator->get_description()) == 0) { // check if the evaluator is the sum evaluator to get the f-value
+                f_val = eval_context.get_evaluator_value_or_infinity(evaluator.get()); // for A* first takes sum[g + h] = f-value...
+                key.push_back(f_val);
+                parent_f_val = parent_eval_context.get_evaluator_value_or_infinity(evaluator.get());
+            } else {
+                key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get())); // ...and then heuristic value h
+            }
 
-    vector<int> key;
-    key.reserve(evaluators.size());
-    for (const shared_ptr<Evaluator> &evaluator : evaluators)
-        key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get())); // gibt zuerst g-val zurück und dann nimmt nächsten evaluator (heuristic) und gibt h-val zurück
+        if (eval_context.get_g_value() == parent_eval_context.get_g_value() && f_val == parent_f_val) { // if g and f are the same, then both are in same plateau
+            eval_context.set_d_value(d_val+1); // set the d-val of the child node (or rather eval_context) to d + 1
+        } else {
+            eval_context.set_d_value(0); // else the child is not in same plateau -> d_val = 0
+        }
+    }
 
     buckets[key].push_back(entry);
     ++size;
@@ -104,7 +118,7 @@ void DivTieBreakingOpenList<Entry>::do_insertion(
 template<class Entry>
 void DivTieBreakingOpenList<Entry>::insert( // overrides already implemented method from open_list.h
         EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
-    if (false && !eval_context.is_preferred())
+    if (false && !eval_context.is_preferred()) // Check for only_preferred is ignored as it is not relevant for the bachelor's thesis
         return;
     if (!is_dead_end(eval_context))
         div_do_insertion(eval_context, entry, parent_eval_context, d_val);
