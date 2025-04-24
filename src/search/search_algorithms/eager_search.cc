@@ -106,6 +106,7 @@ void EagerSearch::initialize() {
         if (use_depth) {
             EvaluationContext dummy_context(initial_state, 0, false, &statistics);
             open_list->insert(eval_context, initial_state.get_id(), dummy_context, -1);
+            node.set_d(0); // initial state always has to have d = 0
         } else {
             open_list->insert(eval_context, initial_state.get_id());
         }
