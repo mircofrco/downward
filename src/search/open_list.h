@@ -46,7 +46,7 @@ public:
       do_insertion.
     */
     void insert(EvaluationContext &eval_context, const Entry &entry);
-    void insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
+    virtual void insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
 
     /*
       Remove and return the entry that should be expanded next.
