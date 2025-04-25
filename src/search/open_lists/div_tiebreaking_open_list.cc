@@ -78,7 +78,6 @@ void DivTieBreakingOpenList<Entry>::div_do_insertion(
     //TODO: actual stuff
     vector<int> key;
     if (d_val == -1) {
-        // TODO: initialze, d = -1
         key.reserve(evaluators.size());
         for (const shared_ptr<Evaluator> &evaluator : evaluators)
             key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get()));
@@ -114,7 +113,7 @@ void DivTieBreakingOpenList<Entry>::do_insertion(
         const Entry &entry) {
     (void)eval_context;
     (void)entry;
-    cerr << "This is just a dummy method which should not be called!" <<endl;
+    cerr << "This is just a dummy method for do_insertion in div_tiebreaking_open_list.cc, which should not be called!" <<endl;
     exit(-1);
 }
 
