@@ -79,6 +79,9 @@ void DivTieBreakingOpenList<Entry>::div_do_insertion(
     vector<int> key;
     if (d_val == -1) {
         // TODO: initialze, d = -1
+        key.reserve(evaluators.size());
+        for (const shared_ptr<Evaluator> &evaluator : evaluators)
+            key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get()));
         eval_context.set_d_value(0);
     } else {
         int f_val;
