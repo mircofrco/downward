@@ -964,5 +964,6 @@ create_fast_downward_library(
     HELP "Diverse Tiebreaking open list for bachelor's thesis"
     SOURCES
         open_lists/div_tiebreaking_open_list
+        open_lists/criteria_tiebreaking_open_list
     CORE_LIBRARY
 )
