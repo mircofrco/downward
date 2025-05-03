@@ -69,7 +69,7 @@ CriteriaTieBreakingOpenList<Entry>::CriteriaTieBreakingOpenList( // Constructor 
 }
 
 template<class Entry>
-void TieBreakingOpenList<Entry>::do_insertion(
+void CriteriaTieBreakingOpenList<Entry>::do_insertion(
         EvaluationContext &eval_context, const Entry &entry) {
     vector<int> key;
     key.reserve(evaluators.size());
