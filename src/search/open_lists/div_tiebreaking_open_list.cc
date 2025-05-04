@@ -146,31 +146,14 @@ Entry DivTieBreakingOpenList<Entry>::remove_min() {
     Selector<Entry> &selector = it->second;
     assert(!selector.empty());
 
-    std::optional<Entry> result;
-
-    switch(tiebreaking_criteria) {
-    case TieBreakingCriteria::FIFO:
-        result = it->second.remove_next(tiebreaking_criteria);
-        --size;
-        break;
-    case TieBreakingCriteria::LIFO:
-        // TODO
-        break;
-    case TieBreakingCriteria::RANDOM:
-        // TODO
-        break;
-    default:
-        cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
-        result = it->second.remove_next(tiebreaking_criteria);
-        --size;
-    }
-
+    Entry result = it->second.remove_next(tiebreaking_criteria);
+    --size;
 
     if (selector.empty()) {
         buckets.erase(it);
     }
 
-    return *result;
+    return result;
 }
 
 template<class Entry>
