@@ -46,21 +46,34 @@ public:
         std::optional<Entry> result;
 
         switch(tiebreaking_criteria) {
-            case div_tiebreaking_open_list::TieBreakingCriteria::FIFO:
+            case div_tiebreaking_open_list::TieBreakingCriteria::FIFO: {
                 result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
                 depth_bucket_list[counter].pop_front();
                 break;
-            case div_tiebreaking_open_list::TieBreakingCriteria::LIFO:
+            }
+            case div_tiebreaking_open_list::TieBreakingCriteria::LIFO: {
                 result = depth_bucket_list[counter].back(); // Tiebreaking inside DepthBucket is LIFO
                 depth_bucket_list[counter].pop_back();
                 break;
-            case div_tiebreaking_open_list::TieBreakingCriteria::RANDOM:
-                // TODO
+            }
+            case div_tiebreaking_open_list::TieBreakingCriteria::RANDOM: {
+                srand(time(nullptr));
+                int pos;
+                int i;
+                i = depth_bucket_list[counter].size();
+                pos = (rand() % i);
+
+                auto it = depth_bucket_list[counter].begin();
+                std::advance(it, pos);
+                result = *it;
+                depth_bucket_list[counter].erase(it);
                 break;
-            default:
+            }
+            default: {
                 std::cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
                 result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
                 depth_bucket_list[counter].pop_front();
+            }
         }
 
         decrease_counter();
