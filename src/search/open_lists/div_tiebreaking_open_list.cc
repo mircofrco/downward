@@ -150,7 +150,7 @@ Entry DivTieBreakingOpenList<Entry>::remove_min() {
 
     switch(tiebreaking_criteria) {
     case TieBreakingCriteria::FIFO:
-        result = it->second.remove_next();
+        result = it->second.remove_next(tiebreaking_criteria);
         --size;
         break;
     case TieBreakingCriteria::LIFO:
@@ -161,7 +161,7 @@ Entry DivTieBreakingOpenList<Entry>::remove_min() {
         break;
     default:
         cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
-        result = it->second.remove_next();
+        result = it->second.remove_next(tiebreaking_criteria);
         --size;
     }
 

@@ -2,6 +2,8 @@
 #define DIV_SELECTOR_H
 
 #include <deque>
+#include "./div_tiebreaking_open_list.h" // for the enums
+#include <optional>
 using std::deque;
 
 template<class Entry>
@@ -17,7 +19,7 @@ public:
         : counter(-1) {
     }
 
-    Entry remove_next() {
+    Entry remove_next(div_tiebreaking_open_list::TieBreakingCriteria tiebreaking_criteria) {
         if (empty()) {
             std::cerr << "Selector::remove_next() called on empty Selector" << std::endl;
             exit(1);
@@ -41,11 +43,28 @@ public:
             exit(1);
         }
 
-        Entry result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO // TODO: add others
-        depth_bucket_list[counter].pop_front();
+        std::optional<Entry> result;
+
+        switch(tiebreaking_criteria) {
+            case div_tiebreaking_open_list::TieBreakingCriteria::FIFO:
+                result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
+                depth_bucket_list[counter].pop_front();
+                break;
+            case div_tiebreaking_open_list::TieBreakingCriteria::LIFO:
+                result = depth_bucket_list[counter].back(); // Tiebreaking inside DepthBucket is LIFO
+                depth_bucket_list[counter].pop_back();
+                break;
+            case div_tiebreaking_open_list::TieBreakingCriteria::RANDOM:
+                // TODO
+                break;
+            default:
+                std::cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
+                result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
+                depth_bucket_list[counter].pop_front();
+        }
 
         decrease_counter();
-        return result;
+        return *result;
     }
 
     void add(Entry entry, int d_value) {
