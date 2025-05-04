@@ -965,5 +965,6 @@ create_fast_downward_library(
     SOURCES
         open_lists/div_tiebreaking_open_list
         open_lists/criteria_tiebreaking_open_list
+        open_lists/selector
     CORE_LIBRARY
 )

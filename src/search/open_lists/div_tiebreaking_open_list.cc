@@ -2,6 +2,7 @@
 
 #include "../evaluator.h"
 #include "../open_list.h"
+#include "selector.h"
 
 #include "../plugins/plugin.h"
 #include "../utils/memory.h"
@@ -21,9 +22,10 @@ using namespace std;
 namespace div_tiebreaking_open_list {
 template<class Entry>
 class DivTieBreakingOpenList : public OpenList<Entry> {
-    using Bucket = deque<Entry>;
+    using DepthBucket = deque<Entry>;
+    //using Bucket = map<int, DepthBucket>;
 
-    map<const vector<int>, Bucket> buckets;
+    map<const vector<int>, Selector<Entry>> buckets;
     int size;
 
     vector<shared_ptr<Evaluator>> evaluators;
@@ -58,7 +60,7 @@ public:
         EvaluationContext &eval_context) const override;
     virtual bool is_reliable_dead_end(
         EvaluationContext &eval_context) const override;
-    void insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
+    void insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) override;
 };
 
 
@@ -77,14 +79,16 @@ void DivTieBreakingOpenList<Entry>::div_do_insertion(
     EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
     //TODO: actual stuff
     vector<int> key;
+    int depth_index = d_val;
     if (d_val == -1) {
         key.reserve(evaluators.size());
         for (const shared_ptr<Evaluator> &evaluator : evaluators)
             key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get()));
         eval_context.set_d_value(0);
+        depth_index = 0;
     } else {
-        int f_val;
-        int parent_f_val;
+        int f_val = -1;
+        int parent_f_val = -1;
         key.reserve(evaluators.size());
         std::string sum_check("sum");
         for (const shared_ptr<Evaluator> &evaluator : evaluators)
@@ -96,14 +100,22 @@ void DivTieBreakingOpenList<Entry>::div_do_insertion(
                 key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get())); // ...and then heuristic value h
             }
 
+        if (f_val < 0 || parent_f_val < 0) {
+            cerr << "The f_value or the parent_f_value could not be calculated in div_do_insertion()." <<endl;
+            exit(-1);
+        }
+
         if (eval_context.get_g_value() == parent_eval_context.get_g_value() && f_val == parent_f_val) { // if g and f are the same, then both are in same plateau
             eval_context.set_d_value(d_val+1); // set the d-val of the child node (or rather eval_context) to d + 1
+            depth_index = d_val + 1;
         } else {
-            eval_context.set_d_value(0); // else the child is not in same plateau -> d_val = 0
+            eval_context.set_d_value(0); // else the child is not in the same plateau -> d_val = 0
+            depth_index = 0;
         }
     }
 
-    buckets[key].push_back(entry);
+    Selector<Entry> &selector = buckets[key];
+    selector.add(entry, depth_index);
     ++size;
 }
 
@@ -129,43 +141,34 @@ void DivTieBreakingOpenList<Entry>::insert( // overrides already implemented met
 template<class Entry>
 Entry DivTieBreakingOpenList<Entry>::remove_min() {
     assert(size > 0);
-    typename map<const vector<int>, Bucket>::iterator it;
-    it = buckets.begin();
-    assert(it != buckets.end());
-    assert(!it->second.empty());
-    --size;
+
+    auto it = buckets.begin();
+    Selector<Entry> &selector = it->second;
+    assert(!selector.empty());
 
     std::optional<Entry> result;
-    auto it_elem = it->second.end();
 
     switch(tiebreaking_criteria) {
     case TieBreakingCriteria::FIFO:
-        result = it->second.front();
-        it->second.pop_front();
+        result = it->second.remove_next();
+        --size;
         break;
     case TieBreakingCriteria::LIFO:
-        result = it->second.back();
-        it->second.pop_back();
+        // TODO
         break;
     case TieBreakingCriteria::RANDOM:
-        srand(time(nullptr));
-        int pos;
-        int i;
-        i = it->second.size();
-        pos = (rand() % i);
-        it_elem = it->second.begin() + pos;
-        result = *it_elem;
-        it->second.erase(it_elem);
+        // TODO
         break;
     default:
         cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
-        Entry result = it->second.front();
-        it->second.pop_front();
+        result = it->second.remove_next();
+        --size;
     }
 
 
-    if (it->second.empty())
+    if (selector.empty()) {
         buckets.erase(it);
+    }
 
     return *result;
 }
