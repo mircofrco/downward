@@ -17,10 +17,10 @@ REVISIONS = ["e77cb0db49bcde989a9b30e70058fe99152efb72"]
 DRIVER_OPTIONS = ["--overall-time-limit", "5m"]
 CONFIGS = [
     common_setup.IssueConfig(
-        "A*",
+        "A*_with_tiebreak",
         [
             "--search",
-            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]))",
+            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
         ],
         driver_options=DRIVER_OPTIONS,
     ),
@@ -43,7 +43,7 @@ ENVIRONMENT = BaselSlurmEnvironment(
     # jobs finish.
     email="m.franco@stud.unibas.ch",
     export=["PATH", "DOWNWARD_BENCHMARKS"],
-#    )
+    )
 
 exp = common_setup.IssueExperiment(
     # TODO: Adapt this path. It should probably be "../.." if you put this
