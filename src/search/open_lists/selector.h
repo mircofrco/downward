@@ -33,11 +33,6 @@ public:
             }
         }
 
-        // search until non-empty DepthBucket is found
-        while (counter >= 0 && depth_bucket_list[counter].empty()) {
-            counter--;
-        }
-
         if (counter < 0) { // no non-empty bucket found
             std::cerr << "All DepthBuckets are currently empty" << std::endl;
             exit(1);
@@ -49,11 +44,17 @@ public:
             case div_tiebreaking_open_list::TieBreakingCriteria::FIFO: {
                 result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
                 depth_bucket_list[counter].pop_front();
+                if (depth_bucket_list[counter].empty()) {
+                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
+                }
                 break;
             }
             case div_tiebreaking_open_list::TieBreakingCriteria::LIFO: {
                 result = depth_bucket_list[counter].back(); // Tiebreaking inside DepthBucket is LIFO
                 depth_bucket_list[counter].pop_back();
+                if (depth_bucket_list[counter].empty()) {
+                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
+                }
                 break;
             }
             case div_tiebreaking_open_list::TieBreakingCriteria::RANDOM: {
@@ -67,12 +68,18 @@ public:
                 std::advance(it, pos);
                 result = *it;
                 depth_bucket_list[counter].erase(it);
+                if (depth_bucket_list[counter].empty()) {
+                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
+                }
                 break;
             }
             default: {
                 std::cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
                 result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
                 depth_bucket_list[counter].pop_front();
+                if (depth_bucket_list[counter].empty()) {
+                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
+                }
             }
         }
 
@@ -98,20 +105,25 @@ public:
 protected:
     void decrease_counter() {
         --counter;
+        std::cout << "Counter decreased to " << counter << std::endl;
         if (counter < 0) {
             rewind_counter();
         }
     }
 
     void rewind_counter() {
-        for (int i = depth_bucket_list.size() - 1; i >= 0; --i) { // goes over all DepthBuckets and finds deepest non-empty one
-            if (!depth_bucket_list[i].empty()) {
-                counter = i;
-                return;
+        if (depth_bucket_list.empty()) {
+            counter = 0;
+            return;
+        } else {
+            for (int i = depth_bucket_list.size() - 1; i >= 0; --i) { // goes over all DepthBuckets and finds deepest non-empty one
+                if (!depth_bucket_list[i].empty()) {
+                    counter = i;
+                    return;
+                }
             }
         }
-        std::cerr << "All DepthBuckets are empty and counter = -1" << std::endl;
-        counter = -1;
+        counter = 0;
     }
 };
 
