@@ -14,11 +14,13 @@ from lab.environments import LocalEnvironment, BaselSlurmEnvironment
 
 # TODO: Enter git commit hash of code version you want to use.
 REVISIONS = ["e77cb0db49bcde989a9b30e70058fe99152efb72"]
-DRIVER_OPTIONS = ["--overall-time-limit", "5m"]
+DRIVER_OPTIONS = ["--debug","--overall-time-limit", "5m"]
 CONFIGS = [
     common_setup.IssueConfig(
-        "A*_with_tiebreak",
+        "A*_with_tiebreak_fifo",
         [
+            "--evaluator",
+            "h=lmcut()",
             "--search",
             "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
         ],
