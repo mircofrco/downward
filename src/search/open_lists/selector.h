@@ -10,13 +10,14 @@ template<class Entry>
 class Selector {
 
     int counter;
+    int number_of_entries;
 
     using DepthBucket = deque<Entry>;
     deque<DepthBucket> depth_bucket_list;
 
 public:
     Selector()
-        : counter(-1) {
+        : counter(-1), number_of_entries(0) {
     }
 
     Entry remove_next(div_tiebreaking_open_list::TieBreakingCriteria tiebreaking_criteria) {
@@ -38,23 +39,22 @@ public:
             exit(1);
         }
 
+        std::cout << "Bucket count: " << depth_bucket_list.size() << ", current counter: " << counter << std::endl;
+        for (size_t i = 0; i < depth_bucket_list.size(); ++i) {
+            std::cout << "  Depth " << i << ": size = " << depth_bucket_list[i].size() << std::endl;
+        }
+
         std::optional<Entry> result;
 
         switch(tiebreaking_criteria) {
             case div_tiebreaking_open_list::TieBreakingCriteria::FIFO: {
                 result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
                 depth_bucket_list[counter].pop_front();
-                if (depth_bucket_list[counter].empty()) {
-                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
-                }
                 break;
             }
             case div_tiebreaking_open_list::TieBreakingCriteria::LIFO: {
                 result = depth_bucket_list[counter].back(); // Tiebreaking inside DepthBucket is LIFO
                 depth_bucket_list[counter].pop_back();
-                if (depth_bucket_list[counter].empty()) {
-                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
-                }
                 break;
             }
             case div_tiebreaking_open_list::TieBreakingCriteria::RANDOM: {
@@ -68,22 +68,36 @@ public:
                 std::advance(it, pos);
                 result = *it;
                 depth_bucket_list[counter].erase(it);
-                if (depth_bucket_list[counter].empty()) {
-                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
-                }
                 break;
             }
             default: {
                 std::cout << "Tie-breaking criteria was not found. Using default FIFO." << std::endl;
                 result = depth_bucket_list[counter].front(); // Tiebreaking inside DepthBucket is FIFO
                 depth_bucket_list[counter].pop_front();
-                if (depth_bucket_list[counter].empty()) {
-                    depth_bucket_list.erase(depth_bucket_list.begin() + counter);
-                }
+            }
+        }
+        --number_of_entries;
+        decrease_counter();
+
+
+        if (!result.has_value()) {
+            std::cerr << "ERROR: result has no value!" << std::endl;
+            exit(1);
+        }
+
+        if constexpr (std::is_same<Entry, StateID>::value) {
+            if (*result == StateID::no_state) {
+                std::cerr << "ERROR: Selected invalid StateID (no_state)" << std::endl;
+                exit(1);
             }
         }
 
-        decrease_counter();
+
+        if constexpr (std::is_same<Entry, StateID>::value) {
+            std::cout << "Selected StateID pair: " << *result << std::endl;
+        } else {
+            std::cout << "Selected StateID: " << result->first << std::endl;
+        }
         return *result;
     }
 
@@ -92,6 +106,7 @@ public:
             depth_bucket_list.resize(d_value + 1);
         }
         depth_bucket_list[d_value].push_back(entry);
+        ++number_of_entries;
     }
 
     bool empty() {
@@ -105,7 +120,12 @@ public:
 protected:
     void decrease_counter() {
         --counter;
-        std::cout << "Counter decreased to " << counter << std::endl;
+        while (depth_bucket_list[counter].empty() && number_of_entries > 0) {
+            --counter;
+            if (counter < 0) {
+                rewind_counter();
+            }
+        }
         if (counter < 0) {
             rewind_counter();
         }

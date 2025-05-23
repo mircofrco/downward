@@ -153,6 +153,14 @@ Entry DivTieBreakingOpenList<Entry>::remove_min() {
         buckets.erase(it);
     }
 
+    if constexpr (std::is_same<Entry, StateID>::value) {
+        if (result == StateID::no_state) {
+            std::cerr << "ERROR in div_open_list: Selected invalid StateID (no_state)" << std::endl;
+            exit(1);
+        }
+    }
+
+
     return result;
 }
 
