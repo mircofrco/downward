@@ -46,7 +46,7 @@ public:
       do_insertion.
     */
     void insert(EvaluationContext &eval_context, const Entry &entry);
-    virtual void insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
+    virtual int insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val);
 
     /*
       Remove and return the entry that should be expanded next.
@@ -153,7 +153,7 @@ void OpenList<Entry>::insert( // original insert
 }
 
 template<class Entry>
-void OpenList<Entry>::insert( // dummy method for all open_list types except div_tiebreaking
+int OpenList<Entry>::insert( // dummy method for all open_list types except div_tiebreaking
         EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
     (void)eval_context;
     (void)entry;
@@ -161,6 +161,7 @@ void OpenList<Entry>::insert( // dummy method for all open_list types except div
     (void)d_val;
     std::cerr << "This is just a dummy method for insert in open_list.h, which should not be called!" <<std::endl;
     exit(-1);
+    return -1;
 }
 
 template<class Entry>
