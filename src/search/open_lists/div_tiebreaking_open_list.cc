@@ -28,6 +28,7 @@ class DivTieBreakingOpenList : public OpenList<Entry> {
     map<const vector<int>, Selector<Entry>> buckets;
     int size;
     int max_number_of_entries;
+    int opli_max_depth;
 
     vector<shared_ptr<Evaluator>> evaluators;
     /*
@@ -61,7 +62,7 @@ public:
         EvaluationContext &eval_context) const override;
     virtual bool is_reliable_dead_end(
         EvaluationContext &eval_context) const override;
-    int insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) override;
+    vector<int> insert(EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) override;
 };
 
 
@@ -70,7 +71,7 @@ DivTieBreakingOpenList<Entry>::DivTieBreakingOpenList( // Constructor when crite
     const vector<shared_ptr<Evaluator>> &evals,
     bool unsafe_pruning, bool pref_only, const TieBreakingCriteria tiebreaking_criteria)
     : OpenList<Entry>(pref_only),
-      size(0), max_number_of_entries(0), evaluators(evals),
+      size(0), max_number_of_entries(0), opli_max_depth(0), evaluators(evals),
       allow_unsafe_pruning(unsafe_pruning),
       tiebreaking_criteria(tiebreaking_criteria) {
 }
@@ -116,9 +117,12 @@ void DivTieBreakingOpenList<Entry>::div_do_insertion(
     }
 
     Selector<Entry> &selector = buckets[key];
-    int number_of_entries = selector.add(entry, depth_index);
-    if (number_of_entries > max_number_of_entries) {
-        max_number_of_entries = number_of_entries;
+    vector<int> max_selector_values = selector.add(entry, depth_index);
+    if (max_selector_values[0] > max_number_of_entries) {
+        max_number_of_entries = max_selector_values[0];
+    }
+    if (max_selector_values[1] > opli_max_depth) {
+        opli_max_depth = max_selector_values[1];
     }
     ++size;
 }
@@ -134,13 +138,14 @@ void DivTieBreakingOpenList<Entry>::do_insertion(
 }
 
 template<class Entry>
-int DivTieBreakingOpenList<Entry>::insert( // overrides already implemented method from open_list.h
+vector<int> DivTieBreakingOpenList<Entry>::insert( // overrides already implemented method from open_list.h
         EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
     if (false && !eval_context.is_preferred()) // Check for only_preferred is ignored as it is not relevant for the bachelor's thesis
-        return -1;
+        return {-1, -1};
     if (!is_dead_end(eval_context))
         div_do_insertion(eval_context, entry, parent_eval_context, d_val);
-    return max_number_of_entries;
+    vector<int> max_opli_values = {max_number_of_entries, opli_max_depth};
+    return max_opli_values;
 }
 
 template<class Entry>

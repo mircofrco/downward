@@ -4,6 +4,7 @@
 #include <deque>
 #include "./div_tiebreaking_open_list.h" // for the enums
 #include <optional>
+#include <vector>
 using std::deque;
 
 template<class Entry>
@@ -11,13 +12,14 @@ class Selector {
 
     int counter;
     int number_of_entries;
+    int max_depth;
 
     using DepthBucket = deque<Entry>;
     deque<DepthBucket> depth_bucket_list;
 
 public:
     Selector()
-        : counter(-1), number_of_entries(0) {
+        : counter(-1), number_of_entries(0), max_depth(0) {
     }
 
     Entry remove_next(div_tiebreaking_open_list::TieBreakingCriteria tiebreaking_criteria) {
@@ -39,10 +41,10 @@ public:
             exit(1);
         }
 
-        std::cout << "Bucket count: " << depth_bucket_list.size() << ", current counter: " << counter << std::endl;
-        for (size_t i = 0; i < depth_bucket_list.size(); ++i) {
-            std::cout << "  Depth " << i << ": size = " << depth_bucket_list[i].size() << std::endl;
-        }
+        //std::cout << "Bucket count: " << depth_bucket_list.size() << ", current counter: " << counter << std::endl;
+        //for (size_t i = 0; i < depth_bucket_list.size(); ++i) {
+        //    std::cout << "  Depth " << i << ": size = " << depth_bucket_list[i].size() << std::endl;
+        //}
 
         std::optional<Entry> result;
 
@@ -93,23 +95,23 @@ public:
             }
         }
 
-
-        if constexpr (std::is_same<Entry, StateID>::value) {
-            std::cout << "Selected StateID pair: " << *result << std::endl;
-        } else {
-            std::cout << "Selected StateID: " << result->first << std::endl;
-        }
         return *result;
     }
 
-    int add(Entry entry, int d_value) {
+    std::vector<int> add(Entry entry, int d_value) {
         if (depth_bucket_list.size() <= d_value) {
             depth_bucket_list.resize(d_value + 1);
         }
         depth_bucket_list[d_value].push_back(entry);
+
+        if ((depth_bucket_list.size() - 1) > max_depth) { // updates maximal depth that has been reached until this point
+            max_depth = (depth_bucket_list.size() - 1);
+        }
+
         ++number_of_entries;
         //std::cout << "Number of entries after add in selector : " << number_of_entries << std::endl;
-        return number_of_entries;
+        std::vector<int> max_values = {number_of_entries, max_depth};
+        return max_values;
     }
 
     bool empty() {
@@ -122,7 +124,6 @@ public:
 
 protected:
     void decrease_counter() {
-        --counter;
         while (depth_bucket_list[counter].empty() && number_of_entries > 0) {
             --counter;
             if (counter < 0) {

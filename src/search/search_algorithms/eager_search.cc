@@ -37,6 +37,7 @@ EagerSearch::EagerSearch(
       preferred_operator_evaluators(preferred),
       use_depth(use_depth),
       max_plateau_entries(0),
+      max_plateau_depth(0),
       lazy_evaluator(lazy_evaluator),     // default nullptr
       pruning_method(pruning) {
     if (lazy_evaluator && !lazy_evaluator->does_cache_estimates()) {
@@ -120,7 +121,8 @@ void EagerSearch::initialize() {
 }
 
 void EagerSearch::print_statistics() const {
-    cout << "Start of print_statistics. Max entries : " << max_plateau_entries << endl;
+    cout << "Max plateau entries : " << max_plateau_entries << endl;
+    cout << "Max plateau depth : " << max_plateau_depth << endl;
     statistics.print_detailed_statistics();
     search_space.print_statistics();
     pruning_method->print_statistics();
@@ -254,9 +256,12 @@ SearchStatus EagerSearch::step() {
             }
             succ_node.open_new_node(*node, op, get_adjusted_cost(op));
             if (use_depth) {
-                int number_of_plateau_entries = open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
-                if (number_of_plateau_entries > max_plateau_entries) {
-                    max_plateau_entries = number_of_plateau_entries;
+                vector<int> max_search_values = open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
+                if (max_search_values[0] > max_plateau_entries) {
+                    max_plateau_entries = max_search_values[0];
+                }
+                if (max_search_values[1] > max_plateau_depth) {
+                    max_plateau_depth = max_search_values[1];
                 }
                 int new_d = succ_eval_context.get_d_value();
                 succ_node.set_d(new_d);
@@ -276,9 +281,12 @@ SearchStatus EagerSearch::step() {
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), is_preferred, &statistics);
                 if (use_depth) {
-                    int number_of_plateau_entries = open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
-                    if (number_of_plateau_entries > max_plateau_entries) {
-                        max_plateau_entries = number_of_plateau_entries;
+                    vector<int> max_search_values = open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
+                    if (max_search_values[0] > max_plateau_entries) {
+                        max_plateau_entries = max_search_values[0];
+                    }
+                    if (max_search_values[1] > max_plateau_depth) {
+                        max_plateau_depth = max_search_values[1];
                     }
                     int new_d = succ_eval_context.get_d_value();
                     succ_node.set_d(new_d);
@@ -298,9 +306,12 @@ SearchStatus EagerSearch::step() {
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), is_preferred, &statistics);
                 if (use_depth) {
-                    int number_of_plateau_entries = open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
-                    if (number_of_plateau_entries > max_plateau_entries) {
-                        max_plateau_entries = number_of_plateau_entries;
+                    vector<int> max_search_values = open_list->insert(succ_eval_context, succ_state.get_id(), curr_eval_context, d_value);
+                    if (max_search_values[0] > max_plateau_entries) {
+                        max_plateau_entries = max_search_values[0];
+                    }
+                    if (max_search_values[1] > max_plateau_depth) {
+                        max_plateau_depth = max_search_values[1];
                     }
                     int new_d = succ_eval_context.get_d_value();
                     succ_node.set_d(new_d);
