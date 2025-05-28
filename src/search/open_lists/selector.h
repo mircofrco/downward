@@ -77,6 +77,7 @@ public:
             }
         }
         --number_of_entries;
+        //std::cout << "Number of entries after remove_next() in selector : " << number_of_entries << std::endl;
         decrease_counter();
 
 
@@ -101,12 +102,14 @@ public:
         return *result;
     }
 
-    void add(Entry entry, int d_value) {
+    int add(Entry entry, int d_value) {
         if (depth_bucket_list.size() <= d_value) {
             depth_bucket_list.resize(d_value + 1);
         }
         depth_bucket_list[d_value].push_back(entry);
         ++number_of_entries;
+        //std::cout << "Number of entries after add in selector : " << number_of_entries << std::endl;
+        return number_of_entries;
     }
 
     bool empty() {

@@ -25,6 +25,7 @@ class EagerSearch : public SearchAlgorithm {
     std::vector<Evaluator *> path_dependent_evaluators;
     std::vector<std::shared_ptr<Evaluator>> preferred_operator_evaluators;
     bool use_depth;
+    int max_plateau_entries;
     std::shared_ptr<Evaluator> lazy_evaluator;
 
     std::shared_ptr<PruningMethod> pruning_method;
