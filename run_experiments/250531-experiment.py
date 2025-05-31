@@ -15,8 +15,7 @@ from experiment-parser import PlateauParser
 
 # TODO: Enter git commit hash of code version you want to use.
 REVISIONS = ["909ff3ae9303b9a6e00f87778fab816fc256288b"]
-BUILD_OPTIONS = ["--debug"]
-DRIVER_OPTIONS = ["--debug", "--overall-time-limit", "5m"]
+DRIVER_OPTIONS = ["--overall-time-limit", "30m"]
 CONFIGS = [
     common_setup.IssueConfig(
         "A*_with_tiebreak_fifo",
@@ -27,7 +26,26 @@ CONFIGS = [
             "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
         ],
         driver_options=DRIVER_OPTIONS,
-	build_options=BUILD_OPTIONS,
+    ),
+    common_setup.IssueConfig(
+        "A*_with_tiebreak_lifo",
+        [
+            "--evaluator",
+            "h=lmcut()",
+            "--search",
+            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
+        ],
+        driver_options=DRIVER_OPTIONS,
+    ),
+    common_setup.IssueConfig(
+        "A*_with_tiebreak_random",
+        [
+            "--evaluator",
+            "h=lmcut()",
+            "--search",
+            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
+        ],
+        driver_options=DRIVER_OPTIONS,
     ),
     # TODO: Add your configs.
 ]
