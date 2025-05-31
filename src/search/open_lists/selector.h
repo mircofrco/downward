@@ -42,11 +42,11 @@ public:
             exit(1);
         }
 
-        std::cout << "Selector: " << this << std::endl;
-        std::cout << "Bucket count: " << depth_bucket_list.size() << ", current counter: " << counter << std::endl;
-        for (size_t i = 0; i < depth_bucket_list.size(); ++i) {
-            std::cout << "  Depth " << i << ": size = " << depth_bucket_list[i].size() << std::endl;
-        }
+        //std::cout << "Selector: " << this << std::endl;
+        //std::cout << "Bucket count: " << depth_bucket_list.size() << ", current counter: " << counter << std::endl;
+        //for (size_t i = 0; i < depth_bucket_list.size(); ++i) {
+        //    std::cout << "  Depth " << i << ": size = " << depth_bucket_list[i].size() << std::endl;
+        //}
 
         std::optional<Entry> result;
 
@@ -81,7 +81,7 @@ public:
             }
         }
         --number_of_entries;
-        std::cout << "remove_next() in selector: " << this  << ", Number of entries after :" << number_of_entries << std::endl;
+        //std::cout << "remove_next() in selector: " << this  << ", Number of entries after :" << number_of_entries << std::endl;
         decrease_counter();
 
 
@@ -115,7 +115,7 @@ public:
         }
 
         ++number_of_entries;
-        std::cout << "add() in selector: " << this  << ", Number of entries after :" << number_of_entries << std::endl;
+        //std::cout << "add() in selector: " << this  << ", Number of entries after :" << number_of_entries << std::endl;
         std::vector<int> max_values = {number_of_entries, max_depth, depth_width};
         return max_values;
     }
@@ -131,10 +131,10 @@ public:
 protected:
     void decrease_counter() {
         --counter;
-        std::cout << "decrease() in selector: " << this << ", counter decreased to: " << counter << std::endl;
+        //std::cout << "decrease() in selector: " << this << ", counter decreased to: " << counter << std::endl;
 
         while (counter >= 0 && depth_bucket_list[counter].empty()) {
-            std::cout << "Bucket at counter " << counter << " is empty. Decreasing further." << std::endl;
+            //std::cout << "Bucket at counter " << counter << " is empty. Decreasing further." << std::endl;
             --counter;
         }
 
@@ -151,13 +151,13 @@ protected:
             for (int i = depth_bucket_list.size() - 1; i >= 0; i--) { // goes over all DepthBuckets and finds deepest non-empty one
                 if (!depth_bucket_list[i].empty()) {
                     counter = i;
-                    std::cout << "rewind() in selector: " << this  << ", counter rewinded to:" << counter << std::endl;
+                    //std::cout << "rewind() in selector: " << this  << ", counter rewinded to:" << counter << std::endl;
                     return;
                 }
             }
         }
         counter = 0;
-        std::cout << "end rewind() in selector: " << this  << ", counter set to:" << counter << std::endl;
+        //std::cout << "end rewind() in selector: " << this  << ", counter set to:" << counter << std::endl;
     }
 };
 
