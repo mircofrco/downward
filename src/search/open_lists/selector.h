@@ -13,13 +13,14 @@ class Selector {
     int counter;
     int number_of_entries;
     int max_depth;
+    int depth_width;
 
     using DepthBucket = deque<Entry>;
     deque<DepthBucket> depth_bucket_list;
 
 public:
     Selector()
-        : counter(-1), number_of_entries(0), max_depth(0) {
+        : counter(-1), number_of_entries(0), max_depth(0), depth_width(0) {
     }
 
     Entry remove_next(div_tiebreaking_open_list::TieBreakingCriteria tiebreaking_criteria) {
@@ -108,9 +109,13 @@ public:
             max_depth = (depth_bucket_list.size() - 1);
         }
 
+        if (depth_bucket_list[d_value].size() > depth_width) { // updates the size of the depthbuckets aka. the width of a depth level
+            depth_width = depth_bucket_list[d_value].size();
+        }
+
         ++number_of_entries;
         //std::cout << "Number of entries after add in selector : " << number_of_entries << std::endl;
-        std::vector<int> max_values = {number_of_entries, max_depth};
+        std::vector<int> max_values = {number_of_entries, max_depth, depth_width};
         return max_values;
     }
 

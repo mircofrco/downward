@@ -27,6 +27,7 @@ class EagerSearch : public SearchAlgorithm {
     bool use_depth;
     int max_plateau_entries;
     int max_plateau_depth;
+    int max_depth_width;
     std::shared_ptr<Evaluator> lazy_evaluator;
 
     std::shared_ptr<PruningMethod> pruning_method;
