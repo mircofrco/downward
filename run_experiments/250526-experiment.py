@@ -11,11 +11,11 @@ from lab.reports import Attribute
 from downward.reports.absolute import AbsoluteReport
 
 from lab.environments import LocalEnvironment, BaselSlurmEnvironment
-from experimentparser import PlateauParser
 
 # TODO: Enter git commit hash of code version you want to use.
-REVISIONS = ["801ba223c021ad0b46ce851587c97a288a56ab0d"]
-DRIVER_OPTIONS = ["--overall-time-limit", "30m"]
+REVISIONS = ["871866a1662f1bb3c2eadd1e77abb14bba6d8422"]
+BUILD_OPTIONS = ["--debug"]
+DRIVER_OPTIONS = ["--debug", "--overall-time-limit", "5m"]
 CONFIGS = [
     common_setup.IssueConfig(
         "A*_with_tiebreak_fifo",
@@ -26,26 +26,7 @@ CONFIGS = [
             "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
         ],
         driver_options=DRIVER_OPTIONS,
-    ),
-    common_setup.IssueConfig(
-        "A*_with_tiebreak_lifo",
-        [
-            "--evaluator",
-            "h=lmcut()",
-            "--search",
-            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
-        ],
-        driver_options=DRIVER_OPTIONS,
-    ),
-    common_setup.IssueConfig(
-        "A*_with_tiebreak_random",
-        [
-            "--evaluator",
-            "h=lmcut()",
-            "--search",
-            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
-        ],
-        driver_options=DRIVER_OPTIONS,
+	build_options=BUILD_OPTIONS,
     ),
     # TODO: Add your configs.
 ]
@@ -83,12 +64,8 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.SINGLE_SEARCH_PARSER)
 exp.add_parser(exp.PLANNER_PARSER)
-exp.add_parser(PlateauParser())
 
-entries = Attribute("max_entries_per_plateau", min_wins=False, absolute=False)
-depth = Attribute("max_depth", min_wins=False, absolute=False)
-width = Attribute("max_depth_width", min_wins=False, absolute=False)
-ATTRIBUTES = IssueExperiment.DEFAULT_TABLE_ATTRIBUTES + [entries, depth, width]
+ATTRIBUTES = IssueExperiment.DEFAULT_TABLE_ATTRIBUTES
 
 exp.add_step("build", exp.build)
 exp.add_step("start", exp.start_runs)
