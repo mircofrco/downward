@@ -85,10 +85,11 @@ exp.add_parser(exp.SINGLE_SEARCH_PARSER)
 exp.add_parser(exp.PLANNER_PARSER)
 exp.add_pattern(PlateauParser())
 
-entries = Attribute("max_entries_per_plateau", min_wins=False, function=arithmetic_mean(), absolute=False)
-depth = Attribute("max_depth", min_wins=False, function=arithmetic_mean(), absolute=False)
-width = Attribute("max_depth_width", min_wins=False, function=arithmetic_mean(), absolute=False)
-ATTRIBUTES = IssueExperiment.DEFAULT_TABLE_ATTRIBUTES + [entries, depth, width]
+entries = Attribute("max_entries_per_plateau", min_wins=False, function=sum(), absolute=False)
+depth = Attribute("max_depth", min_wins=False, function=sum(), absolute=False)
+width = Attribute("max_depth_width", min_wins=False, function=sum(), absolute=False)
+number_of_plateaus = Attribute("max_leveled_plateaus", min_wins=False, function=sum(), absolute=False)
+ATTRIBUTES = IssueExperiment.DEFAULT_TABLE_ATTRIBUTES + [entries, depth, width, number_of_plateaus]
 
 exp.add_step("build", exp.build)
 exp.add_step("start", exp.start_runs)
