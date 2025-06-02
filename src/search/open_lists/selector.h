@@ -14,13 +14,14 @@ class Selector {
     int number_of_entries;
     int max_depth;
     int depth_width;
+    bool has_leveled_plateau;
 
     using DepthBucket = deque<Entry>;
     deque<DepthBucket> depth_bucket_list;
 
 public:
     Selector()
-        : counter(-1), number_of_entries(0), max_depth(0), depth_width(0) {
+        : counter(-1), number_of_entries(0), max_depth(0), depth_width(0), has_leveled_plateau(false) {
     }
 
     Entry remove_next(div_tiebreaking_open_list::TieBreakingCriteria tiebreaking_criteria) {
@@ -101,6 +102,9 @@ public:
     }
 
     std::vector<int> add(Entry entry, int d_value) {
+        if (d_value > 0) { // when the selector has more than one level of depth
+            has_leveled_plateau = true; // we will consider it leveled
+        }
         if (depth_bucket_list.size() <= d_value) {
             depth_bucket_list.resize(d_value + 1);
         }
@@ -126,6 +130,10 @@ public:
                 return false;
         }
         return true;
+    }
+
+    bool has_plateau() {
+        return has_leveled_plateau;
     }
 
 protected:
