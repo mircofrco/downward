@@ -15,7 +15,7 @@ from lab.environments import LocalEnvironment, BaselSlurmEnvironment
 from experiment-parser import PlateauParser
 
 # TODO: Enter git commit hash of code version you want to use.
-REVISIONS = ["909ff3ae9303b9a6e00f87778fab816fc256288b"]
+REVISIONS = ["1a415eebfdd9640db81d4458f7bfed8ab1ddd7a5"]
 DRIVER_OPTIONS = ["--overall-time-limit", "5m"]
 CONFIGS = [
     common_setup.IssueConfig(
