@@ -12,7 +12,7 @@ from lab.reports import arithmetic_mean
 from downward.reports.absolute import AbsoluteReport
 
 from lab.environments import LocalEnvironment, BaselSlurmEnvironment
-from experiment-parser import PlateauParser
+from experimentparser import PlateauParser
 
 # TODO: Enter git commit hash of code version you want to use.
 REVISIONS = ["1a415eebfdd9640db81d4458f7bfed8ab1ddd7a5"]
@@ -102,7 +102,7 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.SINGLE_SEARCH_PARSER)
 exp.add_parser(exp.PLANNER_PARSER)
-exp.add_pattern(PlateauParser())
+exp.add_parser(PlateauParser())
 
 entries = Attribute("max_entries_per_plateau", min_wins=False, function=arithmetic_mean, absolute=False)
 depth = Attribute("max_depth", min_wins=False, function=arithmetic_mean, absolute=False)
