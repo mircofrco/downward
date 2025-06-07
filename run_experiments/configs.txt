@@ -1,0 +1,23 @@
+Baseline
+[f, h, fifo]:           "let(h, lmcut(), eager(criteria_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h])))"
+[f, h, lifo]:           "let(h, lmcut(), eager(criteria_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h])))"
+[f, h, ro]:             "let(h, lmcut(), eager(criteria_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h])))"
+[f, h, <d>, fifo]:      "let(h, lmcut(), eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true))"
+[f, h, <d>, lifo]:      "let(h, lmcut(), eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true))"
+[f, h, <d>, ro]:        "let(h, lmcut(), eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true))"
+
+Distance-to-Go
+[f, h^, fifo]:      "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h_adapted], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h^, lifo]:      "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h_adapted], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h^, ro]:        "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h_adapted], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h, h^, fifo]:   "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h, h_adapted], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h, h^, lifo]:   "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h, h_adapted], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h, h^, ro]:     "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h, h_adapted], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h^-ff, fifo]:   "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h^-ff, lifo]:   "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]))))"
+[f, h^-ff, ro]:     "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]))))"
+
+Distance + Depth
+[f, h^-ff, <d>, fifo]:  "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(div_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)))"
+[f, h^-ff, <d>, lifo]:  "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(div_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)))"
+[f, h^-ff, <d>, ro]:    "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(div_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)))"

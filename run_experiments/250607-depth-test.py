@@ -7,43 +7,38 @@ from common_setup import IssueConfig, IssueExperiment
 import os
 
 from lab.reports import Attribute
+from lab.reports import arithmetic_mean
 
 from downward.reports.absolute import AbsoluteReport
 
 from lab.environments import LocalEnvironment, BaselSlurmEnvironment
-from experimentparser import PlateauParser
+from experiment-parser import PlateauParser
 
 # TODO: Enter git commit hash of code version you want to use.
-REVISIONS = ["801ba223c021ad0b46ce851587c97a288a56ab0d"]
-DRIVER_OPTIONS = ["--overall-time-limit", "30m"]
+REVISIONS = ["1a415eebfdd9640db81d4458f7bfed8ab1ddd7a5"]
+DRIVER_OPTIONS = ["--overall-time-limit", "5m"]
 CONFIGS = [
     common_setup.IssueConfig(
-        "A*_with_tiebreak_fifo",
+        "[f, h^-ff, <d>, fifo]",
         [
-            "--evaluator",
-            "h=lmcut()",
             "--search",
-            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
+            "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(div_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=fifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)))",
         ],
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "A*_with_tiebreak_lifo",
+        "[f, h^-ff, <d>, lifo]",
         [
-            "--evaluator",
-            "h=lmcut()",
             "--search",
-            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
+            "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(div_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=lifo), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)))",
         ],
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "A*_with_tiebreak_random",
+        "[f, h^-ff, <d>, ro]",
         [
-            "--evaluator",
-            "h=lmcut()",
             "--search",
-            "eager(div_tiebreaking([sum([g(), h]), h], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)",
+            "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(div_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]), use_depth=true)))",
         ],
         driver_options=DRIVER_OPTIONS,
     ),
@@ -57,7 +52,7 @@ REPO_DIR = os.environ["DOWNWARD_REPO"]
 #    SUITE = common_setup.IssueExperiment.DEFAULT_TEST_SUITE
 #    ENVIRONMENT = LocalEnvironment(processes=2)
 #else:
-SUITE = common_setup.DEFAULT_OPTIMAL_SUITE
+SUITE = common_setup.DEFAULT_TEST_SUITE
 ENVIRONMENT = BaselSlurmEnvironment(
     # Choose between infai_1 or infai_2. Either works but stick to a
     # single partition when results have to be comparable.
@@ -83,12 +78,13 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.SINGLE_SEARCH_PARSER)
 exp.add_parser(exp.PLANNER_PARSER)
-exp.add_parser(PlateauParser())
+exp.add_pattern(PlateauParser())
 
-entries = Attribute("max_entries_per_plateau", min_wins=False, absolute=False)
-depth = Attribute("max_depth", min_wins=False, absolute=False)
-width = Attribute("max_depth_width", min_wins=False, absolute=False)
-ATTRIBUTES = IssueExperiment.DEFAULT_TABLE_ATTRIBUTES + [entries, depth, width]
+entries = Attribute("max_entries_per_plateau", min_wins=False, function=arithmetic_mean, absolute=False)
+depth = Attribute("max_depth", min_wins=False, function=arithmetic_mean, absolute=False)
+width = Attribute("max_depth_width", min_wins=False, function=arithmetic_mean, absolute=False)
+number_of_plateaus = Attribute("max_leveled_plateaus", min_wins=False, function=arithmetic_mean, absolute=False)
+ATTRIBUTES = IssueExperiment.DEFAULT_TABLE_ATTRIBUTES + [entries, depth, width, number_of_plateaus]
 
 exp.add_step("build", exp.build)
 exp.add_step("start", exp.start_runs)

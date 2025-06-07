@@ -54,6 +54,12 @@ DEFAULT_OPTIMAL_SUITE = [
     "woodworking-cut",
 ]
 
+DEFAULT_TEST_SUITE = [
+    "depot-fuel:p01.pddl",
+    "gripper-move:p01.pddl",
+    "sokoban-pushgoal:p01.pddl",
+]
+
 DEFAULT_SATISFICING_SUITE = [
     "airport-fuel",
     "grid-fuel",
