@@ -81,7 +81,6 @@ DivTieBreakingOpenList<Entry>::DivTieBreakingOpenList( // Constructor when crite
 template<class Entry>
 void DivTieBreakingOpenList<Entry>::div_do_insertion(
     EvaluationContext &eval_context, const Entry &entry, EvaluationContext &parent_eval_context, int d_val) {
-    //TODO: actual stuff
     vector<int> key;
     int depth_index = d_val;
     if (d_val == -1) {
@@ -145,10 +144,14 @@ template<typename Entry>
 void DivTieBreakingOpenList<Entry>::do_insertion(
         EvaluationContext &eval_context,
         const Entry &entry) {
-    (void)eval_context;
-    (void)entry;
-    cerr << "This is just a dummy method for do_insertion in div_tiebreaking_open_list.cc, which should not be called!" <<endl;
-    exit(-1);
+    vector<int> key;
+    key.reserve(evaluators.size());
+    for (const shared_ptr<Evaluator> &evaluator : evaluators)
+        key.push_back(eval_context.get_evaluator_value_or_infinity(evaluator.get()));
+
+    Selector<Entry> &selector = buckets[key];
+    selector.add(entry, 0);
+    ++size;
 }
 
 template<class Entry>

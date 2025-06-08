@@ -11,7 +11,7 @@ from lab.reports import Attribute
 from downward.reports.absolute import AbsoluteReport
 
 from lab.environments import LocalEnvironment, BaselSlurmEnvironment
-from experiment-parser import PlateauParser
+from experimentparser import PlateauParser
 
 # TODO: Enter git commit hash of code version you want to use.
 REVISIONS = ["909ff3ae9303b9a6e00f87778fab816fc256288b"]
