@@ -35,7 +35,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro1]",
         [
             "--search",
             "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h_adapted], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]))))",
@@ -43,7 +43,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro2]",
         [
             "--search",
             "let(h2, lmcut(), let(h_adapted2, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h2]), h_adapted2], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h2]))))",
@@ -51,7 +51,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro3]",
         [
             "--search",
             "let(h3, lmcut(), let(h_adapted3, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h3]), h_adapted3], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h3]))))",
@@ -59,7 +59,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro4]",
         [
             "--search",
             "let(h4, lmcut(), let(h_adapted4, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h4]), h_adapted4], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h4]))))",
@@ -67,7 +67,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro5]",
         [
             "--search",
             "let(h5, lmcut(), let(h_adapted5, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h5]), h_adapted5], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h5]))))",
@@ -75,7 +75,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro6]",
         [
             "--search",
             "let(h6, lmcut(), let(h_adapted6, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h6]), h_adapted6], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h6]))))",
@@ -83,7 +83,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro7]",
         [
             "--search",
             "let(h7, lmcut(), let(h_adapted7, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h7]), h_adapted7], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h7]))))",
@@ -91,7 +91,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro8]",
         [
             "--search",
             "let(h8, lmcut(), let(h_adapted8, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h8]), h_adapted8], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h8]))))",
@@ -99,7 +99,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro9]",
         [
             "--search",
             "let(h9, lmcut(), let(h_adapted9, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h9]), h_adapted9], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h9]))))",
@@ -107,7 +107,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^, ro]",
+        "[f, h^, ro10]",
         [
             "--search",
             "let(h0, lmcut(), let(h_adapted0, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h0]), h_adapted0], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h0]))))",
@@ -131,7 +131,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro1]",
         [
             "--search",
             "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h, h_adapted], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]))))",
@@ -139,7 +139,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro2]",
         [
             "--search",
             "let(h2, lmcut(), let(h_adapted2, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h2]), h2, h_adapted2], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h2]))))",
@@ -147,7 +147,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro3]",
         [
             "--search",
             "let(h3, lmcut(), let(h_adapted3, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h3]), h3, h_adapted3], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h3]))))",
@@ -155,7 +155,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro4]",
         [
             "--search",
             "let(h4, lmcut(), let(h_adapted4, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h4]), h4, h_adapted4], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h4]))))",
@@ -163,7 +163,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro5]",
         [
             "--search",
             "let(h5, lmcut(), let(h_adapted5, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h5]), h5, h_adapted5], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h5]))))",
@@ -171,7 +171,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro6]",
         [
             "--search",
             "let(h6, lmcut(), let(h_adapted6, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h6]), h6, h_adapted6], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h6]))))",
@@ -179,7 +179,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro7]",
         [
             "--search",
             "let(h7, lmcut(), let(h_adapted7, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h7]), h7, h_adapted7], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h7]))))",
@@ -187,7 +187,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro8]",
         [
             "--search",
             "let(h8, lmcut(), let(h_adapted8, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h8]), h8, h_adapted8], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h8]))))",
@@ -195,7 +195,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro9]",
         [
             "--search",
             "let(h9, lmcut(), let(h_adapted9, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h9]), h9, h_adapted9], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h9]))))",
@@ -203,7 +203,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, h^, ro]",
+        "[f, h, h^, ro10]",
         [
             "--search",
             "let(h0, lmcut(), let(h_adapted0, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h0]), h0, h_adapted0], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h0]))))",
@@ -227,7 +227,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro1]:",
         [
             "--search",
             "let(h, lmcut(), let(hff, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), hff], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]))))",
@@ -235,7 +235,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro2]:",
         [
             "--search",
             "let(h2, lmcut(), let(hff2, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h2]), hff2], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h2]))))",
@@ -243,7 +243,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro3]:",
         [
             "--search",
             "let(h3, lmcut(), let(hff3, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h3]), hff3], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h3]))))",
@@ -251,7 +251,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro4]:",
         [
             "--search",
             "let(h4, lmcut(), let(hff4, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h4]), hff4], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h4]))))",
@@ -259,7 +259,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro5]:",
         [
             "--search",
             "let(h5, lmcut(), let(hff5, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h5]), hff5], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h5]))))",
@@ -267,7 +267,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro6]:",
         [
             "--search",
             "let(h6, lmcut(), let(hff6, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h6]), hff6], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h6]))))",
@@ -275,7 +275,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro7]:",
         [
             "--search",
             "let(h7, lmcut(), let(hff7, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h7]), hff7], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h7]))))",
@@ -283,7 +283,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro8]:",
         [
             "--search",
             "let(h8, lmcut(), let(hff8, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h8]), hff8], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h8]))))",
@@ -291,7 +291,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro9]:",
         [
             "--search",
             "let(h9, lmcut(), let(hff9, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h9]), hff9], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h9]))))",
@@ -299,7 +299,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h^-ff, ro]:",
+        "[f, h^-ff, ro10]:",
         [
             "--search",
             "let(h0, lmcut(), let(hff0, ff(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h0]), hff0], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h0]))))",
