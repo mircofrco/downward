@@ -59,7 +59,7 @@ CONFIGS = [
         driver_options=DRIVER_OPTIONS,
     ),
     common_setup.IssueConfig(
-        "[f, h, <d>, ro]",
+        "[f, h, h^, ro]",
         [
             "--search",
             "let(h, lmcut(), let(h_adapted, lmcut(transform=adapt_costs(one)), eager(criteria_tiebreaking([sum([g(), h]), h, h_adapted], unsafe_pruning=false, tiebreaking_criteria=random), reopen_closed=true, f_eval=sum([g(), h]))))",
