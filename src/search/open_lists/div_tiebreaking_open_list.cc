@@ -30,7 +30,6 @@ class DivTieBreakingOpenList : public OpenList<Entry> {
     int max_number_of_entries;
     int opli_max_depth;
     int opli_depth_width;
-    int opli_number_of_plateaus;
 
     vector<shared_ptr<Evaluator>> evaluators;
     /*
@@ -73,7 +72,7 @@ DivTieBreakingOpenList<Entry>::DivTieBreakingOpenList( // Constructor when crite
     const vector<shared_ptr<Evaluator>> &evals,
     bool unsafe_pruning, bool pref_only, const TieBreakingCriteria tiebreaking_criteria)
     : OpenList<Entry>(pref_only),
-      size(0), max_number_of_entries(0), opli_max_depth(0), opli_depth_width(0), opli_number_of_plateaus(0), evaluators(evals),
+      size(0), max_number_of_entries(0), opli_max_depth(0), opli_depth_width(0), evaluators(evals),
       allow_unsafe_pruning(unsafe_pruning),
       tiebreaking_criteria(tiebreaking_criteria) {
 }
@@ -128,15 +127,6 @@ void DivTieBreakingOpenList<Entry>::div_do_insertion(
     if (max_selector_values[2] > opli_depth_width) {
         opli_depth_width = max_selector_values[2];
     }
-    int number_of_plateaus = 0;
-    for (auto i : buckets) {
-        if (i.second.has_plateau()) {
-            ++number_of_plateaus;
-        }
-    }
-    if (number_of_plateaus > opli_number_of_plateaus) {
-        opli_number_of_plateaus = number_of_plateaus;
-    }
     ++size;
 }
 
@@ -161,7 +151,7 @@ vector<int> DivTieBreakingOpenList<Entry>::insert( // overrides already implemen
         return {-1, -1};
     if (!is_dead_end(eval_context))
         div_do_insertion(eval_context, entry, parent_eval_context, d_val);
-    vector<int> max_opli_values = {max_number_of_entries, opli_max_depth, opli_depth_width, opli_number_of_plateaus};
+    vector<int> max_opli_values = {max_number_of_entries, opli_max_depth, opli_depth_width};
     return max_opli_values;
 }
 

@@ -39,7 +39,6 @@ EagerSearch::EagerSearch(
       max_plateau_entries(0),
       max_plateau_depth(0),
       max_depth_width(0),
-      max_number_of_plateaus(0),
       lazy_evaluator(lazy_evaluator),     // default nullptr
       pruning_method(pruning) {
     if (lazy_evaluator && !lazy_evaluator->does_cache_estimates()) {
@@ -126,7 +125,6 @@ void EagerSearch::print_statistics() const {
     cout << "Max plateau entries : " << max_plateau_entries << endl;
     cout << "Max plateau depth : " << max_plateau_depth << endl;
     cout << "Max depth width : " << max_depth_width << endl;
-    cout << "Max leveled plateaus : " << max_number_of_plateaus << endl;
     statistics.print_detailed_statistics();
     search_space.print_statistics();
     pruning_method->print_statistics();
@@ -270,9 +268,6 @@ SearchStatus EagerSearch::step() {
                 if (max_search_values[2] > max_depth_width) {
                     max_depth_width = max_search_values[2];
                 }
-                if (max_search_values[3] > max_number_of_plateaus) {
-                    max_number_of_plateaus = max_search_values[3];
-                }
                 int new_d = succ_eval_context.get_d_value();
                 succ_node.set_d(new_d);
             } else {
@@ -301,9 +296,6 @@ SearchStatus EagerSearch::step() {
                     if (max_search_values[2] > max_depth_width) {
                         max_depth_width = max_search_values[2];
                     }
-                    if (max_search_values[3] > max_number_of_plateaus) {
-                        max_number_of_plateaus = max_search_values[3];
-                    }
                     int new_d = succ_eval_context.get_d_value();
                     succ_node.set_d(new_d);
                 } else {
@@ -331,9 +323,6 @@ SearchStatus EagerSearch::step() {
                     }
                     if (max_search_values[2] > max_depth_width) {
                         max_depth_width = max_search_values[2];
-                    }
-                    if (max_search_values[3] > max_number_of_plateaus) {
-                        max_number_of_plateaus = max_search_values[3];
                     }
                     int new_d = succ_eval_context.get_d_value();
                     succ_node.set_d(new_d);
