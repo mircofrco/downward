@@ -37,6 +37,7 @@ public:
                 rewind_counter();
             }
         }
+        decrease_counter();
 
         if (counter < 0) { // no non-empty bucket found
             std::cerr << "All DepthBuckets are currently empty" << std::endl;
@@ -83,7 +84,6 @@ public:
         }
         --number_of_entries;
         //std::cout << "remove_next() in selector: " << this  << ", Number of entries after :" << number_of_entries << std::endl;
-        decrease_counter();
 
 
         if (!result.has_value()) {
