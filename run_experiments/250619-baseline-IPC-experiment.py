@@ -220,7 +220,7 @@ REPO_DIR = os.environ["DOWNWARD_REPO"]
 #    SUITE = common_setup.IssueExperiment.DEFAULT_TEST_SUITE
 #    ENVIRONMENT = LocalEnvironment(processes=2)
 #else:
-SUITE = common_setup.DEFAULT_OPTIMAL_SUITE
+SUITE = common_setup.DEFAULT_IPC_SUITE
 ENVIRONMENT = BaselSlurmEnvironment(
     # Choose between infai_1 or infai_2. Either works but stick to a
     # single partition when results have to be comparable.
