@@ -19,7 +19,6 @@ PATTERNS = [
     ["max_entries_per_plateau", r"Max plateau entries : (\d+)", int],
     ["max_depth", r"Max plateau depth : (\d+)", int],
     ["max_depth_width", r"Max depth width : (\d+)", int],
-    ["max_leveled_plateaus", r"Max leveled plateaus : (\d+)", int],
 ]
 
 class PlateauParser(Parser):
